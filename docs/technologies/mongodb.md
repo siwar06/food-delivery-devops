@@ -30,7 +30,7 @@ doesn't exist yet.
 - `notification-service` declares `spring-boot-starter-data-mongodb` in its own `pom.xml`
   (RULES.md §4) — this dependency is unique to this service; no Postgres-backed service carries
   it.
-- Connection is configured via `spring.data.mongodb.uri` (or host/port/database/credentials) in
+- Connection is configured via `spring.mongodb.uri` (or host/port/database/credentials) in
   `notification-service`'s `application-{profile}.yml`, with the `docker` profile pointing at the
   Docker Compose service hostname rather than `localhost` (RULES.md §10).
 - MongoDB is listed as one of the required backing infrastructure resources started by

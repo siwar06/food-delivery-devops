@@ -22,7 +22,7 @@ public abstract class AbstractIntegrationTest {
 
 	@DynamicPropertySource
 	static void dynamicProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.data.mongodb.uri", () -> MONGODB.getReplicaSetUrl("notification_db_test"));
+		registry.add("spring.mongodb.uri", () -> MONGODB.getReplicaSetUrl("notification_db_test"));
 		registry.add("spring.rabbitmq.host", RABBITMQ::getHost);
 		registry.add("spring.rabbitmq.port", RABBITMQ::getAmqpPort);
 		registry.add("spring.rabbitmq.username", RABBITMQ::getAdminUsername);
