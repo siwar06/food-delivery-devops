@@ -19,7 +19,7 @@ spec:
             - "host.minikube.internal"
       containers:
         - name: api-gateway
-          image: siwarsrairi/api-gateway:1.0
+          image: siwarsrairi/api-gateway:1.2
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
