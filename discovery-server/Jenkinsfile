@@ -1,0 +1,80 @@
+pipeline {
+    agent {
+        label 'ubuntu'
+    }
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        DOCKER_IMAGE = 'siwarsrairi/discovery-server'
+    }
+
+    stages {
+        stage('1. Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('2. Build and Test') {
+            steps {
+                echo 'Building and testing discovery-server'
+                sh '''
+                    chmod +x mvnw
+                    ./mvnw -B -pl discovery-server -am clean verify
+                '''
+            }
+        }
+
+        stage('3. Docker Build') {
+            steps {
+                echo 'Building discovery-server Docker image'
+                sh '''
+                    docker build \
+                      -f discovery-server/Dockerfile \
+                      -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        stage('4. Docker Push') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_PASSWORD'
+                    )
+                ]) {
+                    sh '''
+                        set +x
+
+                        echo "$DOCKERHUB_PASSWORD" | docker login \
+                          -u "$DOCKERHUB_USERNAME" \
+                          --password-stdin
+
+                        docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
+
+                        docker logout
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "SUCCESS: ${DOCKER_IMAGE}:${BUILD_NUMBER} pushed to Docker Hub!"
+        }
+
+        failure {
+            echo 'FAILURE: Check the Console Output.'
+        }
+
+        always {
+            echo 'Discovery-Server Pipeline finished.'
+        }
+    }
+}
