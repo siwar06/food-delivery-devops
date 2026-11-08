@@ -69,3 +69,4 @@ id_ecdsa*
 *.bak.*
 *.backup
 *.bak*
+credentials.md
