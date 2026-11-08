@@ -63,3 +63,9 @@ id_ecdsa*
 .aws/
 .gcp/
 *.tfvars
+
+# Backup files - keep local, never commit
+*.bak
+*.bak.*
+*.backup
+*.bak*

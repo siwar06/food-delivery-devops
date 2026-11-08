@@ -118,6 +118,9 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-kcadmin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-kcadmin}
       KC_HEALTH_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HOSTNAME: https://foodie.test:30443
+      KC_HTTP_ENABLED: "true"
     ports:
       - "${KEYCLOAK_PORT:-8180}:8080"
     volumes:
