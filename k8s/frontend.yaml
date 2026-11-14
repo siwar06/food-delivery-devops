@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: siwarsrairi/food-delivery-frontend:1.2
+          image: siwarsrairi/food-delivery-frontend:1.3
           imagePullPolicy: Always
           ports:
             - containerPort: 80
