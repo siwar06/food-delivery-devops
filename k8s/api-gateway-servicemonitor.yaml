@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: api-gateway
+  namespace: food-delivery
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - food-delivery
+  selector:
+    matchLabels:
+      app: api-gateway
+      monitoring: enabled
+  endpoints:
+    - port: management
+      path: /actuator/prometheus
+      interval: 30s

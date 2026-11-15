@@ -45,7 +45,7 @@ public class SecurityConfig {
 				.csrf(ServerHttpSecurity.CsrfSpec::disable)
 				.securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
 				.authorizeExchange(exchange -> exchange
-						.pathMatchers("/actuator/health", "/actuator/health/**").permitAll()
+						.pathMatchers("/actuator/health", "/actuator/health/**","/actuator/prometheus").permitAll()
 						.pathMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 						.anyExchange().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2

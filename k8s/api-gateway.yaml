@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: api-gateway
   namespace: food-delivery
+  labels:
+    app: api-gateway
+    monitoring: enabled
 spec:
   replicas: 1
   selector:
@@ -22,7 +25,10 @@ spec:
           image: siwarsrairi/api-gateway:1.2
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9091
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://discovery-server:8761/eureka/"
@@ -47,20 +53,20 @@ spec:
           startupProbe:
             httpGet:
               path: /actuator/health
-              port: 8080
+              port: 9091
             failureThreshold: 60
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8080
+              port: 9091
             periodSeconds: 10
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8080
+              port: 9091
             periodSeconds: 20
             timeoutSeconds: 5
 ---
@@ -69,6 +75,9 @@ kind: Service
 metadata:
   name: api-gateway
   namespace: food-delivery
+  labels:
+    app: api-gateway
+    monitoring: enabled
 spec:
   selector:
     app: api-gateway
@@ -78,3 +87,21 @@ spec:
       targetPort: 8080
       nodePort: 30080
   type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-metrics
+  namespace: food-delivery
+  labels:
+    app: api-gateway
+    monitoring: enabled
+spec:
+  type: ClusterIP
+  selector:
+    app: api-gateway
+  ports:
+    - name: management
+      port: 9091
+      targetPort: 9091
+      protocol: TCP
