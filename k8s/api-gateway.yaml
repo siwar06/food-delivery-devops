@@ -22,7 +22,7 @@ spec:
             - "host.minikube.internal"
       containers:
         - name: api-gateway
-          image: siwarsrairi/api-gateway:1.2
+          image: siwarsrairi/api-gateway:1.3
           imagePullPolicy: Always
           ports:
             - name: http
